@@ -1,11 +1,11 @@
 const Profile = require('../models/Profile');
 const router  = require('express').Router();
-const upload  = require('../storage');
+const upload  = require('../storageService');
 
 var addProfile = (req, res) => {
 	// Add New Profile Here
-
-	if ( req.files.resume ) {
+	console.log( req.body )
+	if ( req.files ) {
 		console.dir( req.files.resume );
 	}
 
@@ -23,8 +23,9 @@ var getProfiles = (req, res) => {
 	// Return all Profiles Here
 }
 
-router.use(upload);
-router.post('/new', addProfile);
-router.post('/:profileId/update', updateProfile);
+router.post('/new', upload.single('resume'), addProfile);
+router.post('/:profileId/update', upload.single('resume'), updateProfile);
 router.delete('/:profileId/delete', removeProfile);
 router.get('/', getProfiles);
+
+module.exports = router;
