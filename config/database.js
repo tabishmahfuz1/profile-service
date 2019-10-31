@@ -1,3 +1,3 @@
 module.exports = {
-  db: 'mongodb://localhost:27017/resumeStorage'
+  db: 'mongodb://localhost:27017/profilesDatabase'
 };
