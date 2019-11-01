@@ -9,3 +9,7 @@
 *.launch
 .settings/
 *.sublime-workspace
+
+# Uploads
+
+/public/uploads/*
