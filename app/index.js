@@ -26,6 +26,13 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 
+app.use((req, res, next) => {
+  req.appUrl = req.protocol + '://' + req.get('host');
+  req.storageUrl = req.appUrl + '/files/';
+  console.log(req.appUrl, req.storageUrl)
+  next();
+})
+
 app.use(function(req, res, next) {
 //set headers to allow cross origin request.
     res.header("Access-Control-Allow-Origin", "*");
@@ -37,8 +44,16 @@ app.use(function(req, res, next) {
 app.use(routes);
 
 // Find 404 and hand over to error handler
-app.use((req, res, next) => {
-  next(createError(404));
+// app.use((req, res, next) => {
+//   next(createError(404));
+// });
+app.use('/files', express.static('public/uploads'))
+
+// error handler
+app.use(function (err, req, res, next) {
+    console.error(err.message);
+    if (!err.statusCode) err.statusCode = 500;
+    res.status(err.statusCode).send(err.message);
 });
 
 // Index Route
@@ -53,12 +68,7 @@ app.get('*', (req, res) => {
   	// res.sendFile(path.join(__dirname, 'dist/angular8-meanstack-angular-material/index.html'));
 });
 
-// error handler
-app.use(function (err, req, res, next) {
-  	console.error(err.message);
-  	if (!err.statusCode) err.statusCode = 500;
-  	res.status(err.statusCode).send(err.message);
-});
+
 
 
 module.exports = app;
