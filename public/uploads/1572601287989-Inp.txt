@@ -1,4 +1,0 @@
-FruitName      Owner             OwnerPhone
-=============  ================= ============
-Red Apple      Sr Lorem Ipsum    123123
-Yellow Banana  Ms Dolor sir Amet 456456
