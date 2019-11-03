@@ -1,4 +1,5 @@
 const Profile = require('../models/Profile');
+const List 	  = require('../models/List');
 const router  = require('express').Router();
 const upload  = require('../storageService');
 
@@ -6,13 +7,16 @@ var addProfile = (req, res) => {
 	let newProfile = req.body;
 
 	newProfile.resume = req.file.filename;
-	Profile.create(req.body, (error, data) => {
+	Profile.create(newProfile, (error, data) => {
 		if (error) {
 	      return next(error)
 	    } else {
 	      res.json(data)
 	    }
 	});
+	newProfile.skill.forEach(skill => List.updateList('SKILL', skill));
+	
+	List.updateList('PROFILE', newProfile.profile);
 }
 
 var updateProfile = (req, res) => {
@@ -31,6 +35,8 @@ var updateProfile = (req, res) => {
 	        return res.json(profile);
 	    }
 	)
+	newProfile.skill.forEach(skill => List.updateList('SKILL', skill));
+	List.updateList('PROFILE', newProfile.profile);
 }
 
 var removeProfile = (req, res) => {
