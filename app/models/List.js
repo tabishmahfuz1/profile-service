@@ -18,17 +18,16 @@ let List = new Schema({
 })
 List.index({type: 1, value: 1}, {unique: true});
 
-
-
 List.statics.updateList = async (type, value) => {
-  const val = await List.findOne({type, name});
-
+  const val = await ListModel.findOne({type, value});
   if (! val) {
-    return List.create({type, name});
+    return ListModel.create({type, value});
   }
   return val;
 }
 
-let ListModel = mongoose.model('List', List);
+List.statics.get = type => ListModel.find({ type });
+
+const ListModel = mongoose.model('List', List);
 
 module.exports = ListModel;

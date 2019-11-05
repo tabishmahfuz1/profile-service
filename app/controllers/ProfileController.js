@@ -14,9 +14,7 @@ var addProfile = (req, res) => {
 	      res.json(data)
 	    }
 	});
-	newProfile.skill.forEach(skill => List.updateList('SKILL', skill));
-	
-	List.updateList('PROFILE', newProfile.profile);
+	updateListsfromProfile(newProfile);
 }
 
 var updateProfile = (req, res) => {
@@ -35,9 +33,19 @@ var updateProfile = (req, res) => {
 	        return res.json(profile);
 	    }
 	)
-	newProfile.skill.forEach(skill => List.updateList('SKILL', skill));
-	List.updateList('PROFILE', newProfile.profile);
+	updateListsfromProfile(profileToSave);
 }
+
+var updateListsfromProfile = async profile => {
+	let finalpromise = [];
+	if( profile.skills instanceof Array )
+		profile.skills.forEach(skill => finalpromise.push(List.updateList('SKILL', skill)));
+	else
+		finalpromise.push(List.updateList('SKILL', profile.skills));
+	finalpromise.push(List.updateList('PROFILE', profile.profile));
+
+	return Promise.all(finalpromise);
+} 
 
 var removeProfile = (req, res) => {
 	// Delete a Profile Here
